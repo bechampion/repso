@@ -6,7 +6,6 @@ from bottle import route, run, template
 
 
 
-dt = 22221788
 def setup():
     btconf = braintree.Configuration.configure(braintree.Environment.Sandbox,
         merchant_id="9bwqrvqmpknc9knm",
@@ -15,8 +14,8 @@ def setup():
     return btconf
 
 def listTransactions(clientToken=None,loadAmount=0):
-    # if loadAmount > 1000:
-        # return False
+    if loadAmount > 1000:
+        return False
     collection = braintree.Transaction.search(
     braintree.TransactionSearch.customer_id == clientToken,
     braintree.TransactionSearch.created_at.between(
@@ -45,9 +44,6 @@ def listTransactions(clientToken=None,loadAmount=0):
 
 
 setup()
-# print listTransactions(dt,10)
-
-
 @route('/load/<client>/<amount>')
 def index(client,amount):
     return {"response":listTransactions(client,int(amount))}
