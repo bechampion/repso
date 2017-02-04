@@ -3,9 +3,6 @@ import datetime
 import braintree
 import datetime
 from bottle import route, run, template
-
-
-
 def setup():
     btconf = braintree.Configuration.configure(braintree.Environment.Sandbox,
         merchant_id="9bwqrvqmpknc9knm",
@@ -30,19 +27,12 @@ def listTransactions(clientToken=None,loadAmount=0):
     response.append(True) if loadAmount + sum([ int(x.amount) for x in collection ]) <= 2000 else response.append(False)#as the original search is 365 anyways
     return False if False in response else True
 
-
-
-
-
-
 '''
     - maximum 500 worth of loads per day
     - maximum 800 worth of loads per 30 days
     - maximum 2000 worth of loads per 365 days
     - maximum balance at any time 1000
 '''
-
-
 setup()
 @route('/load/<client>/<amount>')
 def index(client,amount):
